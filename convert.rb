@@ -24,13 +24,31 @@ class Convertion
     columns = Hash[undersocre_names.zip(types)]
 
     puts "==================== CREATE CODE IS ===================="
-    undersocre_names.zip(name).each {|under, n| puts ":#{under} => #{parse_by_type(columns[under], n)}, \n" }
 
+    code_string = <<-EFO
+    def self.my_create(user_id, data)
+      attribute = {:user_id=> user_id,  
+      #{attribute_string(undersocre_names, name, columns)}
+                  }  
+    
+    create!(attribute) 
+    end  
+
+    EFO
+    # undersocre_names.zip(name).each {|under, n| puts ":#{under} => #{parse_by_type(columns[under], n)}, \n" }
+    # undersocre_names.zip(name).each {|under, n| code_string << "  :#{under} => #{parse_by_type(columns[under], n)}, \n" }
+    print code_string
 
     puts "==================== MIGRATE CODE IS ===================="
     if undersocre_names.size == types.size
       undersocre_names.zip(types).each{|n,t| puts "#{n}:#{t} \\"}
     end    
+  end
+
+  def self.attribute_string(undersocre_names, name, columns)
+    str = ""
+    undersocre_names.zip(name).each {|under, n| str << "                   :#{under} => #{parse_by_type(columns[under], n)}, \n" }
+    return str
   end
 
   def self.parse_by_type(type, n)
