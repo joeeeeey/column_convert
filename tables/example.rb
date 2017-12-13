@@ -1,5 +1,5 @@
 require_relative '../convert'
-name=%w(
+camel_names = %w(
   name
   idCard
   certifyDate
@@ -11,7 +11,7 @@ name=%w(
 )
 
 
-type = %w(
+types = %w(
   string
   string
   date
@@ -22,4 +22,9 @@ type = %w(
   int
 )
 
-Convertion.convert(name, type)
+is_list = false
+
+Convertion.new({camel_names: camel_names, 
+                types: types,
+                model_name: 'JdBankCardList',
+                is_list: is_list }).convert

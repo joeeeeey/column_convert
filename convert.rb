@@ -16,46 +16,82 @@ class Array
 end
 
 class Convertion
-  def self.convert(name, types)
-    types = types.polish_types
+  attr_accessor :camel_names, :columns, :model_name, :is_list, :undersocre_names, :types
 
-    undersocre_names = name.map{|i|i.underscore}
+  def initialize(options={})
 
-    columns = Hash[undersocre_names.zip(types)]
+   @camel_names = options[:camel_names]
 
-    puts "==================== CREATE CODE IS ===================="
+   @undersocre_names = @camel_names.map{|i|i.underscore}
 
-    code_string = <<-EFO
-    def self.my_create(user_id, data)
-      attribute = {:user_id=> user_id,  
-      #{attribute_string(undersocre_names, name, columns)}
-                  }  
-    
-    create!(attribute) 
-    end  
+   @types = options[:types].polish_types
 
-    EFO
-    # undersocre_names.zip(name).each {|under, n| puts ":#{under} => #{parse_by_type(columns[under], n)}, \n" }
-    # undersocre_names.zip(name).each {|under, n| code_string << "  :#{under} => #{parse_by_type(columns[under], n)}, \n" }
-    print code_string
+   if undersocre_names.size == types.size
+     @columns = Hash[undersocre_names.zip(types)]
+   end
 
-    puts "==================== MIGRATE CODE IS ===================="
-    if undersocre_names.size == types.size
-      undersocre_names.zip(types).each{|n,t| puts "#{n}:#{t} \\"}
-    end    
+   @model_name = options[:model_name]
+
+   @is_list = options[:is_list]
   end
 
-  def self.attribute_string(undersocre_names, name, columns)
+  def convert
+    code_string = @is_list ? list_code : single_code
+    puts "\n\n==================== CREATE CODE IS ====================\n\n"
+    puts code_string
+
+    puts "\n\n==================== MIGRATE CODE IS ====================\n\n"
+    if @undersocre_names.size == types.size
+      undersocre_names.zip(types).each{|n,t| puts "#{n}:#{t} \\"}
+    end   
+  end
+
+  def list_code
+    return <<-EFO
+def self.my_create(user_id, data)
+  return if data.blank?
+  columns = column_names.select{|x| !["id", "created_at", "updated_at"].include? x}
+  array = []
+  data.each do |sub_data|
+    array << {
+      :user_id=> user_id,  
+#{attribute_string}  
+    }
+  end
+
+  #{model_name}.import columns, array, :validate => false
+end  
+    EFO
+  end
+
+  def single_code
+    return <<-EFO
+def self.my_create(user_id, data)
+  attribute = {
+      :user_id=> user_id,  
+#{attribute_string}  
+  }
+
+  create!(attribute) 
+end  
+    EFO
+  end
+
+
+  def attribute_string
     str = ""
-    undersocre_names.zip(name).each {|under, n| str << "                   :#{under} => #{parse_by_type(columns[under], n)}, \n" }
+    @undersocre_names.zip(@camel_names).each do |under, n| 
+      str << "      :#{under} => #{parse_by_type(@columns[under], n)}, \n" 
+    end
     return str
   end
 
-  def self.parse_by_type(type, n)
+  def parse_by_type(type, n)
+    prefix = @is_list ? "sub_data[\"#{n}\"]" : "data[\"#{n}\"]"
     case type
-    when 'string','integer','float' then "data[\"#{n}\"]"
-    when 'datetime' then "(data[\"#{n}\"].to_datetime rescue nil)"  
-    when 'text' then "(data[\"#{n}\"].to_json rescue nil)"  
+    when 'string','integer','float' then prefix
+    when 'datetime' then "(#{prefix}.to_datetime rescue nil)"  
+    when 'text' then "(#{prefix}.to_json rescue nil)"  
     end
   end
 end
