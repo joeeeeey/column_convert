@@ -1,6 +1,10 @@
 # column_convert
 
-### USE
+### Introduce
+
+Generate migration command and create code by attributes names and types.
+
+### USE CASE
 ```
-  ruby ruby tables/example.rb 
+$ ruby tables/example.rb 
 ```

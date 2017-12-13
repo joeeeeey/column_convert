@@ -24,7 +24,9 @@ types = %w(
 
 is_list = false
 
+model_name = 'JdBankCardList'
+
 Convertion.new({camel_names: camel_names, 
                 types: types,
-                model_name: 'JdBankCardList',
+                model_name: model_name,
                 is_list: is_list }).convert

@@ -41,6 +41,8 @@ class Convertion
     puts code_string
 
     puts "\n\n==================== MIGRATE CODE IS ====================\n\n"
+    puts "create_#{model_name.underscore}:"
+    puts "rails g model #{model_name} user:references \\"
     if @undersocre_names.size == types.size
       undersocre_names.zip(types).each{|n,t| puts "#{n}:#{t} \\"}
     end   
@@ -50,7 +52,7 @@ class Convertion
     return <<-EFO
 def self.my_create(user_id, data)
   return if data.blank?
-  columns = column_names.select{|x| !["id", "created_at", "updated_at"].include? x}
+  columns = (column_names.select{|x| !["id", "created_at", "updated_at"].include? x}).map {|x|x.to_sym}
   array = []
   data.each do |sub_data|
     array << {
@@ -59,7 +61,7 @@ def self.my_create(user_id, data)
     }
   end
 
-  #{model_name}.import columns, array, :validate => false
+  import columns, array, :validate => false
 end  
     EFO
   end
