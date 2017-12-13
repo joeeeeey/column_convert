@@ -8,6 +8,7 @@ class Array
       when "int" then "integer"
       when "list" then "text"
       when "double","number" then "float"
+      when "date" then "datetime"
       else x  
       end
     }

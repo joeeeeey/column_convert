@@ -14,7 +14,7 @@ name=%w(
 type = %w(
   string
   string
-  datetime
+  date
   string
   string
   string
