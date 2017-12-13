@@ -1,4 +1,4 @@
-require_relative 'convert'
+require_relative '../convert'
 name=%w(
   name
   idCard

@@ -24,7 +24,7 @@ class Convertion
     columns = Hash[undersocre_names.zip(types)]
 
     puts "==================== CREATE CODE IS ===================="
-    undersocre_names.zip(name).each {|under, n| puts ":#{under}=> #{parse_by_type(columns[under], n)}, \n" }
+    undersocre_names.zip(name).each {|under, n| puts ":#{under} => #{parse_by_type(columns[under], n)}, \n" }
 
 
     puts "==================== MIGRATE CODE IS ===================="
@@ -36,8 +36,8 @@ class Convertion
   def self.parse_by_type(type, n)
     case type
     when 'string','integer','float' then "data[\"#{n}\"]"
-    when 'datetime' then "data[\"#{n}\"].to_datetime"  
-    when 'text' then "data[\"#{n}\"].to_json"  
+    when 'datetime' then "(data[\"#{n}\"].to_datetime rescue nil)"  
+    when 'text' then "(data[\"#{n}\"].to_json rescue nil)"  
     end
   end
 end

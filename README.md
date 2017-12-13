@@ -2,5 +2,5 @@
 
 ### USE
 ```
-  ruby jdCertificationInfo.rb
+  ruby ruby tables/example.rb 
 ```
