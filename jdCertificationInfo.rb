@@ -18,8 +18,8 @@ type = %w(
   string
   string
   string
-  integer
-  integer
+  int
+  int
 )
 
 Convertion.convert(name, type)
