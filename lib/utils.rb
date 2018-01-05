@@ -8,6 +8,7 @@ class String
     self.to_f.to_s == self
   end
 end
+
 module Utils
   def convert_type(data)
     types = data.values.map do |e|
@@ -41,7 +42,7 @@ module Utils
       when 'Fixnum' then 'integer'
       when 'Float' then 'float'
       when 'TrueClass','FalseClass' then 'boolean'  
-      when 'Hash' then 'text' 
+      when 'Hash','Array' then 'text' 
       when 'Date' then 'datetime' 
       else 
         p e.class.to_s + "未知"
@@ -57,7 +58,7 @@ module Utils
 
     require 'date'
     begin
-      return 'Date' if Date.parse(str)
+      return 'Date' if str.to_datetime
     rescue ArgumentError
       return 'String'
     end
