@@ -1,19 +1,7 @@
 require 'active_record'
 require 'active_support/all'
 
-class Array
-  def polish_types
-    map { |x|
-      case x
-      when "int" then "integer"
-      when "list" then "text"
-      when "double","number" then "float"
-      when "date" then "datetime"
-      else x  
-      end
-    }
-  end
-end
+Dir['./lib/extension/*'].each {|f|require f}
 
 class Convertion
   attr_accessor :camel_names, :columns, :model_name, :is_list, 
