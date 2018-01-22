@@ -7,21 +7,53 @@ module Utils
   # 1. 对于这个 key 的数据条目, null 占比数量大于 50%
   # 2. 非 null 类型都为同一类型
   # 则认为 null 类型也都是此类型
-  def guess_null_type
-    
+  def guess_null_type(v)
+    groups = {}
+    v.each do |k, e_v|
+      if e_v.nil?
+        groups[nil] ? groups[nil] += 1 : groups[nil] = 1
+      else 
+        groups[e_v.class.to_s] ? groups[e_v.class.to_s] += 1:groups[e_v.class.to_s] = 1
+      end
+    end
+
+    keys = groups.keys
+    if keys.include?(nil) &&  keys.size == 2 
+      data_counts = groups.values.sum
+      if groups[nil].to_f/data_counts <= 0.4
+        # TODO 给缺失赋予值
+      end
+
+    end
+    return v
+  end
+
+  def polish_key(origin_key, key_mapping)
+    destination_key = key_mapping[origin_key]
+    if !destination_key.nil?
+
+      if destination_key == ""
+        return ""
+      else 
+        return "#{destination_key}_"
+      end
+    end
+    return "#{origin_key.to_s}_"
   end
 
   # 将数据中是 hash 类型的 key 提取出来
-  def extract_hash(data, new_data={}, key_prefix='')
+  def extract_hash(data, new_data={}, key_prefix='', guess=false, key_mapping = {})
     data.each do |k, v|
       if v.is_a? Hash 
-        extract_hash(v, new_data, "#{k.to_s}_")
+        v = guess_null_type(v) if guess
+        extract_hash(v, new_data, polish_key(k, key_mapping), guess, key_mapping)
       else 
         new_data.merge!("#{key_prefix + k.to_s}"=>v)  
       end
     end
     return new_data
   end
+
 
   
   # 判断数据类型 

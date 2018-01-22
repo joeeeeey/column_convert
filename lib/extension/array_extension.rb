@@ -1,12 +1,12 @@
 class Array
   def polish_types
     map { |x|
-      case x
+      case x.downcase
       when "int" then "integer"
       when "list" then "text"
-      when "double","number" then "float"
+      when "double","number","long" then "float"
       when "date" then "datetime"
-      else x  
+      else x.downcase
       end
     }
   end

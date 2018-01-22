@@ -16,6 +16,7 @@ class Convertion
 
    @undersocre_names = @camel_names.map{|i|i.underscore}
 
+   # 将如 int 这种非 ruby 类型转化为 ruby 类型
    @types = options[:types].polish_types
 
    if undersocre_names.size == types.size
