@@ -4,7 +4,7 @@ module Utils
   # 对于非顶层 key 对应的数据若为 hash 类型
   # 若这个 hash 对应的数据中有多条 null
   # 如何猜测这些 null 数据的类型?
-  # 1. 对于这个 key 的数据条目, null 占比数量大于 50%
+  # 1. 对于这个 key 的数据条目, null 占比数量小于 50%
   # 2. 非 null 类型都为同一类型
   # 则认为 null 类型也都是此类型
   def guess_null_type(v)

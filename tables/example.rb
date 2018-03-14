@@ -1,32 +1,41 @@
 require_relative '../convert'
+require_relative '../lib/utils'
+Dir['./lib/conversions/*.rb'].each {|f|require f}
+
+# 属性名称
 camel_names = %w(
-  name
-  idCard
-  certifyDate
-  bindingPhone
-  certifyChannel
-  financialService
-  isBtActivity
-  status
+suanhua_fraud_level
+suanhua_fraud_score
+suanhua_fraud_remark
 )
 
-
+# 属性类型
 types = %w(
   string
-  string
-  date
-  string
-  string
-  string
   int
-  int
+  string
 )
 
+# 是否是数组
 is_list = false
 
-model_name = 'JdBankCardList'
+# 这个 model 名称
+model_name = 'SuanhuaBlacklist'
 
-Convertion.new({camel_names: camel_names, 
-                types: types,
-                model_name: model_name,
-                is_list: is_list }).convert
+# 关联的 base_info 名称
+base_models = ["SuanhuaBlacklistBaseInfo"]
+
+
+NewConvertion.new({camel_names: camel_names, 
+                  types: types,
+                  model_name: model_name,
+                  is_list: is_list,
+                  use_symbol: true,
+                  base_models: base_models }).convert
+
+
+
+
+          
+          
+          

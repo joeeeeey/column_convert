@@ -29,6 +29,7 @@ class Convertion
 
    @user_references = options[:user_references].nil? ? false : options[:user_references]
 
+
    @is_raw_model = options[:is_raw_model].nil? ? false : options[:is_raw_model]
 
    @base_model_name = options[:base_model_name]
@@ -45,7 +46,7 @@ class Convertion
 
     puts "\n\n==================== MIGRATE CODE IS ====================\n\n"
     puts "create_#{model_name.underscore}:"
-    puts "rails g model #{model_name} user:#{user_references ? 'references' : 'integer'} loan_id:integer#{is_raw_model ? '' : ' json_data:text'} \\"
+    puts "rails g model #{model_name} #{user_references ? 'user:references' : 'user_id:integer'} #{is_raw_model ? ' json_data:text' : ''} \\"
 
     if undersocre_names.size == types.size
       undersocre_names.zip(types).each{|n,t| puts "#{n}:#{t} \\"}
