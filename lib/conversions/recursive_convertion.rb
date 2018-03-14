@@ -1,0 +1,2 @@
+class RecursiveConvertion < Convertion
+end

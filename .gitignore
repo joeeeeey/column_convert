@@ -1,4 +1,3 @@
 tables/*.rb
 !tables/example.rb
 /json_files
-/lib/conversions/*.rb
