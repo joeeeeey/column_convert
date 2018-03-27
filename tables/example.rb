@@ -17,7 +17,7 @@ types = %w(
 )
 
 # 是否是数组
-is_list = false
+is_list = true
 
 # 这个 model 名称
 model_name = 'SuanhuaBlacklist'

@@ -77,7 +77,6 @@ class NewConvertion < Convertion
       class #{model_name} < WarehouseBase
         #{belongs_relation(base_models)}
         def self.my_create(options)
-          return if data.blank?
           user_id = options[:user_id]
           relation_model_data = options[:relation_model_data]
           data = options[:data]
